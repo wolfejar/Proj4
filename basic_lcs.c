@@ -11,8 +11,8 @@ static int **_matrix;
 static int _matrix_row_size = 0;
 static int _matrix_collumn_size = 0;
 
-int lengthOfSubstring [WIKI_ARRAY_SIZE];
-int LCS (char * s1, char * s2, char ** longest_common_substring);
+char* resultingSubstrings [WIKI_ARRAY_SIZE];
+char* LCS (char * s1, char * s2, char ** longest_common_substring);
 
 //load the lines into an array
 char  **wiki_array;
@@ -43,12 +43,12 @@ int main()
     	gettimeofday(&time3, NULL);
 
     	int i;
-    	for(i = 0; i < WIKI_ARRAY_SIZE - 1 ; i++)
+    	for(i = 0; i < WIKI_ARRAY_SIZE /*- 1*/ ; i++)
     	{
 		      printf("%d-%d: %s", i ,i + 1 ,"lines submitted to LCS");
           printf("\n");
-       		lengthOfSubstring[i]= LCS((void*)wiki_array[i], (void*)wiki_array[i+1], longestSub);
-       		longestSub++;
+       		resultingSubstrings[i] = LCS((void*)wiki_array[i], (void*)wiki_array[i+1], longestSub);
+       		//longestSub++;
     	}
 	  printToFile();
 
@@ -113,9 +113,9 @@ void printToFile()
 
 	//longestSub = longestSub - (WIKI_ARRAY_SIZE - 1);
 	int i;
-	for(i = 0; i < WIKI_ARRAY_SIZE - 2; i++)
+	for(i = 0; i < WIKI_ARRAY_SIZE /*- 2*/; i++)
 	{
-		fprintf(f, "%d-%d: %s", i, i + 1,longestSub[i]);
+		fprintf(f, "%d-%d: %s", i, i + 1, resultingSubstrings[i]);
 		fprintf(f, "\n");
 	}
 
@@ -124,7 +124,7 @@ void printToFile()
 
 void printResults()
 {
-  	int i;
+  int i;
 	longestSub = longestSub - (WIKI_ARRAY_SIZE - 1);
   	for(i = 0; i <= WIKI_ARRAY_SIZE - 2; i++)
   	{
@@ -160,11 +160,10 @@ void printResults()
 		_matrix[s1_length][j] = 0;
 }
 
-int LCS(char *s1, char *s2, char **longest_common_substring)
+char* LCS(char *s1, char *s2, char **longest_common_substring)
 {
     	int s1_length = strlen(s1);
     	int s2_length = strlen(s2);
-      printf("%s\n\n\n\n\n\n\n\n\n", s1);
     	init(s1_length, s2_length);
 
     	int max_len = 0, max_index_i = -1;
@@ -173,19 +172,19 @@ int LCS(char *s1, char *s2, char **longest_common_substring)
     	{
     		for (j = s2_length-1; j >= 0; j--)
 		{
-    	    		if (s1[i] != s2[j])
+    	    if (s1[i] != s2[j])
 	    		{
     				_matrix[i][j] = 0;
     				continue;
-    	    		}
+    	    }
 
-    	    		_matrix[i][j] = _matrix[i+1][j+1] + 1;
+    	    _matrix[i][j] = _matrix[i+1][j+1] + 1;
 
-    	    		if (_matrix[i][j] > max_len)
+    	    if (_matrix[i][j] > max_len)
 	    		{
     				max_len = _matrix[i][j];
     				max_index_i = i;
-    	    		}
+    	    }
     		}
     	}
     	if (longest_common_substring != NULL)
@@ -193,7 +192,8 @@ int LCS(char *s1, char *s2, char **longest_common_substring)
 		      *longest_common_substring = malloc(sizeof(char) * (max_len+1));
 		      strncpy(*longest_common_substring, s1+max_index_i, max_len);
 		      (*longest_common_substring)[max_len] = '\0';
-		      //printf("%s\n", *longest_common_substring);
+		      printf("%s\n", *longest_common_substring);
+          printf("%d\n", max_len);
     	}
-    	return max_len;
+    	return *longest_common_substring;
 }
