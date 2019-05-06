@@ -4,8 +4,8 @@
 #include <sys/time.h>
 #include <stdbool.h>
 
-#define WIKI_ARRAY_SIZE 10
-#define WIKI_LINE_SIZE 2001
+int WIKI_ARRAY_SIZE 1000000
+int WIKI_LINE_SIZE 2001
 
 static int **_matrix;
 static int _matrix_row_size = 0;
@@ -38,7 +38,7 @@ int main()
     	//time to read to memory
     	e1 = (time2.tv_sec - time1.tv_sec) * 1000.0; //sec to ms
     	e1 += (time2.tv_usec - time1.tv_usec) / 1000.0; // us to ms
-    	printf("Time to read full file to Memory: %f\n", e1);
+    	printf("Time to read full file to Memory: %f ms\n", e1);
 
     	gettimeofday(&time3, NULL);
 
@@ -88,7 +88,7 @@ void readToMemory()
 	  	longestSub[i] = malloc(2001);
 	}
 
-	fd = fopen("testData10.txt", "r");
+	fd = fopen("/homes/dan/625/wiki_dump.txt", "r");
 	nlines = -1;
 	do
 	{
